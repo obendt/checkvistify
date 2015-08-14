@@ -12,10 +12,10 @@ module MyModule {
         public getTasks() {
             var url:string = 'http://checkvistify-transcg.rhcloud.com/tasks/active';
             return this.$http.get(url)
-                .then((result:angular.IHttpPromiseCallbackArg) => {
+                .then((result:angular.IHttpPromiseCallbackArg<any>) => {
                     return result.data;
                 },
-                (error:angular.IHttpPromiseCallbackArg) => {
+                (error:angular.IHttpPromiseCallbackArg<any>) => {
                     console.log('error');
                     this.$log.error('Error ' + error);
                 });

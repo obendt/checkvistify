@@ -7,3 +7,5 @@ plugins/
 
 www/js/tasks.controller.js
 www/js/tasks.controller.js.map
+www/js/tasks.service.js
+www/js/tasks.service.js.map

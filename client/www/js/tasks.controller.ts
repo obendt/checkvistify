@@ -24,10 +24,10 @@ module controllers {
             '</ion-header-bar>' +
             '<ion-content>' +
             '<div class="card list">' +
-            '<div class="item item-centered" ng-click="hideModal()">Do today</div>' +
-            '<div class="item" ng-click="hideModal()">Do tomorrow</div>' +
-            '<div class="item" ng-click="hideModal()">Do next week</div>' +
-            '<div class="item" ng-click="hideModal()">Do next month</div>' +
+            '<div class="item" ng-click="doToday(currentTask)">Do today</div>' +
+            '<div class="item" ng-click="doTomorrow(currentTask)">Do tomorrow</div>' +
+            '<div class="item" ng-click="doNextWeek(currentTask)">Do next week</div>' +
+            '<div class="item" ng-click="doNextMonth(currentTask)">Do next month</div>' +
             '<div class="item" ng-click="hideModal()">Cancel</div>' +
             '</div>' +
             '</ion-content>' +
@@ -67,6 +67,11 @@ module controllers {
             this.isolateScope.showModal = this.showModal.bind(this);
             this.isolateScope.hideModal = this.hideModal.bind(this);
 
+            this.isolateScope.doToday = this.doToday.bind(this);
+            this.isolateScope.doTomorrow = this.doTomorrow.bind(this);
+            this.isolateScope.doNextWeek= this.doNextWeek.bind(this);
+            this.isolateScope.doNextMonth= this.doNextMonth.bind(this);
+
             this.isolateScope.showPopover = this.showPopover.bind(this);
             this.isolateScope.hidePopover = this.hidePopover.bind(this);
 
@@ -104,6 +109,26 @@ module controllers {
 
         hideModal() {
             this.modal.hide();
+        }
+
+        doToday(task) {
+            task.due = 'ASAP';
+            this.hideModal()
+        }
+
+        doTomorrow(task) {
+            task.due = moment().add(1, 'days').format('YYYY/MM/DD');
+            this.hideModal()
+        }
+
+        doNextWeek(task) {
+            task.due = moment().add(1, 'weeks').format('YYYY/MM/DD');
+            this.hideModal()
+        }
+
+        doNextMonth(task) {
+            task.due = moment().add(1, 'months').format('YYYY/MM/DD');
+            this.hideModal()
         }
 
         showPopover($event:ng.IAngularEvent, listItem:ListItem) {

@@ -9,3 +9,7 @@ www/js/tasks.controller.js
 www/js/tasks.controller.js.map
 www/js/tasks.service.js
 www/js/tasks.service.js.map
+www/js/taskList.service.js
+www/js/taskList.service.js.map
+www/js/ListItem.js
+www/js/ListItem.js.map

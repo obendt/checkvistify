@@ -1,18 +1,15 @@
-/// <reference path="tasks.service.ts" />
+/// <reference path="ListItem.ts" />
+/// <reference path="taskList.service.ts" />
 /// <reference path="../../typings/tsd.d.ts" />
 module controllers {
-    class ListItem {
-        isComplete:boolean;
-
-        constructor(name:string) {
-        }
-    }
 
     export class TaskListController {
         name:string;
-        listItems:ListItem[];
+
+        private taskItems:domain.ListItem[];
+
         newItemName:string;
-        taskService:MyModule.TasksService;
+        taskService:services.TasksService;
         isolateScope:any;
         modal;
         popover;
@@ -45,14 +42,13 @@ module controllers {
 
         static $inject = [
             "$scope",
-            "TasksService",
+            "TaskListService",
             "$ionicModal",
             "$ionicPopover"
         ];
 
-        constructor(isolateScope:any, TaskService:MyModule.TasksService, $ionicModal, $ionicPopover) {
+        constructor(isolateScope:any, taskListService:services.TaskListService, $ionicModal, $ionicPopover) {
             this.name = isolateScope.name;
-            this.taskService = TaskService;
             this.isolateScope = isolateScope;
             this.modal = $ionicModal.fromTemplate(this.modalTemplate, {
                 scope: isolateScope,
@@ -63,34 +59,25 @@ module controllers {
                 scope: isolateScope
             });
 
-
             this.isolateScope.showModal = this.showModal.bind(this);
             this.isolateScope.hideModal = this.hideModal.bind(this);
 
             this.isolateScope.doToday = this.doToday.bind(this);
             this.isolateScope.doTomorrow = this.doTomorrow.bind(this);
-            this.isolateScope.doNextWeek= this.doNextWeek.bind(this);
-            this.isolateScope.doNextMonth= this.doNextMonth.bind(this);
+            this.isolateScope.doNextWeek = this.doNextWeek.bind(this);
+            this.isolateScope.doNextMonth = this.doNextMonth.bind(this);
 
             this.isolateScope.showPopover = this.showPopover.bind(this);
             this.isolateScope.hidePopover = this.hidePopover.bind(this);
 
-            this.refresh();
+            this.isolateScope.taskLists = taskListService;
+            this.isolateScope.taskLists.refresh();
         }
 
-        refresh() {
-            this.taskService.getTasks()
-                .then((tasks) => {
-                    this.isolateScope.todayItems = tasks;
-                    this.isolateScope.tomorrowItems = tasks;
-                    this.isolateScope.nextWeekItems = tasks;
-                    this.isolateScope.nextMonthItems = tasks;
-                });
-        }
 
         save() {
             if (this.newItemName && this.newItemName.length > 0) {
-                var newItem = new ListItem(this.newItemName);
+                var newItem = new domain.ListItem(this.newItemName);
                 this.listItems.push(newItem);
 
                 this.newItemName = null;
@@ -112,23 +99,25 @@ module controllers {
         }
 
         doToday(task) {
-            task.due = 'ASAP';
-            this.hideModal()
+            this.isolateScope.taskLists.doToday(task);
+            this.hideModal();
         }
 
         doTomorrow(task) {
-            task.due = moment().add(1, 'days').format('YYYY/MM/DD');
-            this.hideModal()
+            this.isolateScope.taskLists.doTomorrow(task);
+            this.hideModal();
         }
 
         doNextWeek(task) {
             task.due = moment().add(1, 'weeks').format('YYYY/MM/DD');
-            this.hideModal()
+            this.isolateScope.taskLists.distributeTasks();
+            this.hideModal();
         }
 
         doNextMonth(task) {
             task.due = moment().add(1, 'months').format('YYYY/MM/DD');
-            this.hideModal()
+            this.isolateScope.taskLists.distributeTasks();
+            this.hideModal();
         }
 
         showPopover($event:ng.IAngularEvent, listItem:ListItem) {

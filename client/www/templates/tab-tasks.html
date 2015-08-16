@@ -4,7 +4,37 @@
             Today
         </div>
         <ion-list>
-            <ion-item class="item-remove-animate" ng-repeat="task in todayItems"
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.today"
+                      ng-click="showModal(task)" type="item-text-wrap">
+                <h2>{{task.content}}</h2>
+
+                <p>{{task.due}}</p>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(task)">
+                    Complete
+                </ion-option-button>
+            </ion-item>
+            <div class="item item-divider">
+                Tomorrow
+            </div>
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.tomorrow"
+                      ng-click="showModal(task)" type="item-text-wrap">
+                <h2>{{task.content}}</h2>
+
+                <p>{{task.due}}</p>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(task)">
+                    Complete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+        <ion-list>
+        </ion-list>
+        <div class="item item-divider">
+            This week
+        </div>
+        <ion-list>
+            <ion-item class="item-remove-animate" ng-repeat="task in thisWeekItems"
                       ng-click="showModal(task)" type="item-text-wrap">
                 <h2>{{task.content}}</h2>
 
@@ -16,10 +46,10 @@
             </ion-item>
         </ion-list>
         <div class="item item-divider">
-            Tomorrow
+            later
         </div>
         <ion-list>
-            <ion-item class="item-remove-animate" ng-repeat="task in todayItems"
+            <ion-item class="item-remove-animate" ng-repeat="task in laterItems"
                       ng-click="showModal(task)" type="item-text-wrap">
                 <h2>{{task.content}}</h2>
 

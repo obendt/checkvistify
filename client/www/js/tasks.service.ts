@@ -1,5 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
-module MyModule {
+module services {
     export class TasksService {
         private $http:angular.IHttpService;
         private $log:angular.ILogService;

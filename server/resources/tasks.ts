@@ -69,6 +69,18 @@ class Tasks {
                 });
             });
     }
+
+    updateTask(task) {
+        var url = 'https://beta.checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
+        return this.client({
+            method: 'PUT',
+            path: url,
+            entity: task
+        }).then((response) => {
+            return response.status.code;
+        });
+
+    }
 }
 
 module.exports = Tasks;

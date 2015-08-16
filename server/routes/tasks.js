@@ -19,5 +19,12 @@ router.get('/active', function(req, res, next) {
     });
 });
 
+router.put('/:id', function (req, res, next) {
+  tasks.updateTask(req.entity)
+    .then(function (status) {
+      res.send(status);
+    });
+});
+
 
 module.exports = router;

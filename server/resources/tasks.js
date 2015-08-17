@@ -6,7 +6,8 @@ var Tasks = (function () {
         var rest = require('rest');
         var mime = require('rest/interceptor/mime');
         var basicAuth = require('rest/interceptor/basicAuth');
-        this.client = rest.wrap(mime)
+        this.client = rest
+            .wrap(mime)
             .wrap(basicAuth, {
             username: process.env.CV_USER,
             password: process.env.CV_KEY
@@ -67,8 +68,6 @@ var Tasks = (function () {
         })
             .then(function (response) {
             return response.status.code;
-        }, function (error) {
-            console.log('Error: ' + error);
         });
     };
     return Tasks;

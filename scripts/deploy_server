@@ -1,0 +1,6 @@
+#!/bin/bash
+git clone ~/Source/checkvistify ~/Source/tmp/checkvistify_server_deploy
+cd ~/Source/tmp/checkvistify_server_deploy
+git filter-branch --prune-empty --subdirectory-filter server master
+git push ssh://55be6c930c1e662a8c00009b@checkvistify-transcg.rhcloud.com/~/git/checkvistify.git/ -f
+rm -rf ~/Source/tmp/checkvistify_server_deploy

@@ -5,11 +5,8 @@ node_modules/
 platforms/
 plugins/
 
-www/js/tasks.controller.js
-www/js/tasks.controller.js.map
-www/js/tasks.service.js
-www/js/tasks.service.js.map
-www/js/taskList.service.js
-www/js/taskList.service.js.map
-www/js/ListItem.js
+www/lib/*
+www/js/*.*.js
+www/js/*.*.js.map
 www/js/ListItem.js.map
+www/js/ListItem.js

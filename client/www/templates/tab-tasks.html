@@ -1,6 +1,34 @@
 <ion-view view-title="Tasks" view>
     <ion-content>
         <div class="item item-divider">
+            Overdue
+        </div>
+        <ion-list>
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.overdue"
+                      ng-click="showModal(task)" type="item-text-wrap">
+                <h2>{{task.content}}</h2>
+
+                <p>{{task.due}}</p>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(task)">
+                    Complete
+                </ion-option-button>
+            </ion-item>
+            <div class="item item-divider">
+                Tomorrow
+            </div>
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.tomorrow"
+                      ng-click="showModal(task)" type="item-text-wrap">
+                <h2>{{task.content}}</h2>
+
+                <p>{{task.due}}</p>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(task)">
+                    Complete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+        <div class="item item-divider">
             Today
         </div>
         <ion-list>
@@ -34,7 +62,7 @@
             This week
         </div>
         <ion-list>
-            <ion-item class="item-remove-animate" ng-repeat="task in thisWeekItems"
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.thisWeek"
                       ng-click="showModal(task)" type="item-text-wrap">
                 <h2>{{task.content}}</h2>
 
@@ -46,10 +74,10 @@
             </ion-item>
         </ion-list>
         <div class="item item-divider">
-            later
+            Later
         </div>
         <ion-list>
-            <ion-item class="item-remove-animate" ng-repeat="task in laterItems"
+            <ion-item class="item-remove-animate" ng-repeat="task in taskLists.later"
                       ng-click="showModal(task)" type="item-text-wrap">
                 <h2>{{task.content}}</h2>
 

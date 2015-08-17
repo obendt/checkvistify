@@ -26,7 +26,7 @@ module controllers {
             this.name = isolateScope.name;
             this.isolateScope = isolateScope;
 
-            $ionicModal.fromTemplateUrl('../templates/modal-actions.html', {
+            $ionicModal.fromTemplateUrl('templates/modal-actions.html', {
                 scope: isolateScope,
                 animation: 'slide-in-up'
             }).then((modal) => {
@@ -84,14 +84,12 @@ module controllers {
         }
 
         doNextWeek(task) {
-            task.due = moment().add(1, 'weeks').format('YYYY/MM/DD');
-            this.isolateScope.taskLists.distributeTasks();
+            this.isolateScope.taskLists.doNextWeek(task);
             this.hideModal();
         }
 
         doNextMonth(task) {
-            task.due = moment().add(1, 'months').format('YYYY/MM/DD');
-            this.isolateScope.taskLists.distributeTasks();
+            this.isolateScope.taskLists.doNextMonth(task);
             this.hideModal();
         }
     }

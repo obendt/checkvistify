@@ -22,7 +22,7 @@ module services {
             this.today = [];
             this.tomorrow = [];
             this.thisWeek = [];
-            this.later= [];
+            this.later = [];
         }
 
         public refresh() {
@@ -41,22 +41,43 @@ module services {
             _.remove(this.thisWeek, task);
             _.remove(this.later, task);
 
-            if (moment(task.due).isSame(moment(), 'day')
+            if (moment(task.due).isBefore(moment(), 'day')) {
+                this.overdue.push(task);
+            } else if (moment(task.due).isSame(moment(), 'day')
                 || _.isEqual(task.due, 'ASAP')) {
                 this.today.push(task);
             } else if (moment(task.due).isSame(moment().add(1, 'day'), 'day')) {
                 this.tomorrow.push(task);
+            } else if (moment(task.due).isBefore(moment().endOf('week').add(1, 'day'))) { // Moment.js week ends on saturday but I prefer Sunday
+                this.thisWeek.push(task);
+            }
+            else {
+                this.later.push(task);
             }
         }
 
         doToday(task) {
             task.due = 'ASAP';
             this.distributeTask(task);
+            this.tasksResource.updateTask(task);
         }
 
         doTomorrow(task) {
             task.due = moment().add(1, 'days').format('YYYY/MM/DD');
             this.distributeTask(task);
+            this.tasksResource.updateTask(task);
+        }
+
+        doNextWeek(task) {
+            task.due = moment().add(1, 'weeks').format('YYYY/MM/DD');
+            this.distributeTask(task);
+            this.tasksResource.updateTask(task);
+        }
+
+        doNextMonth(task) {
+            task.due = moment().add(1, 'months').format('YYYY/MM/DD');
+            this.distributeTask(task);
+            this.tasksResource.updateTask(task);
         }
     }
 

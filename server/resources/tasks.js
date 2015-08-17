@@ -58,13 +58,17 @@ var Tasks = (function () {
         });
     };
     Tasks.prototype.updateTask = function (task) {
-        var url = 'https://beta.checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
+        var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({
             method: 'PUT',
             path: url,
-            entity: task
-        }).then(function (response) {
+            headers: { 'Content-Type': 'application/json' },
+            entity: { due_date: task.due }
+        })
+            .then(function (response) {
             return response.status.code;
+        }, function (error) {
+            console.log('Error: ' + error);
         });
     };
     return Tasks;

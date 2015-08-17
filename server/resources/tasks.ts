@@ -71,14 +71,18 @@ class Tasks {
     }
 
     updateTask(task) {
-        var url = 'https://beta.checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
+        var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({
             method: 'PUT',
             path: url,
-            entity: task
-        }).then((response) => {
-            return response.status.code;
-        });
+            headers: {'Content-Type': 'application/json'},
+            entity: {due_date:task.due}
+        })
+            .then((response) => {
+                return response.status.code;
+            }, (error) => {
+                console.log('Error: ' + error);
+            });
 
     }
 }

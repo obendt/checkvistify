@@ -20,9 +20,12 @@ router.get('/active', function(req, res, next) {
 });
 
 router.put('/:id', function (req, res, next) {
-  tasks.updateTask(req.entity)
+  tasks.updateTask(req.body)
     .then(function (status) {
       res.send(status);
+    },
+    function (error) {
+      console.log(error);
     });
 });
 

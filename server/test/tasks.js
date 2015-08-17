@@ -39,7 +39,7 @@ describe('Tasks', function () {
       });
   });
 
-  it('should return an array of all tasks with a due date', function (done) {
+  xit('should return an array of all tasks with a due date', function (done) {
     var tasks = new Tasks();
     tasks.getAllTasksWithADueDate()
       .then(function (theTasks) {
@@ -49,7 +49,7 @@ describe('Tasks', function () {
       });
   });
 
-  it('should return an array of ACTIVE tasks with a due date', function (done) {
+  xit('should return an array of ACTIVE tasks with a due date', function (done) {
     var tasks = new Tasks();
     tasks.getActiveTasksWithADueDate()
       .then(function (theTasks) {
@@ -58,4 +58,33 @@ describe('Tasks', function () {
         done();
       });
   });
+
+  it('should update a task with new data', function (done) {
+    var tasks = new Tasks();
+    tasks.updateTask({
+      "id": 19137285,
+      "parent_id": 0,
+      "checklist_id": 482559,
+      "status": 0,
+      "position": 4,
+      "tasks": [],
+      "update_line": "due date changed by Olof",
+      "updated_at": "2015/08/11 11:20:38 +0000",
+      "collapsed": false,
+      "comments_count": 0,
+      "details": {},
+      "due": "2015/08/12",
+      "assignee_ids": [],
+      "content": "Shapeways",
+      "tags": {},
+      "tags_as_text": ""
+    })
+      .then(function (status) {
+        assert.equal(status, '200');
+        done();
+      },
+      function (error) {
+        console.log('error goes here :asdfasdfasdf\n')
+      });
+  })
 });

@@ -44,7 +44,7 @@ angular.module('starter', ['ionic','ionic.service.core', 'controllers', 'service
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountController as vm'
       }
     }
   })

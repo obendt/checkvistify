@@ -13,14 +13,17 @@ router.get('/', function(req, res, next) {
 
 /* GET active tasks listing. */
 router.get('/active', function(req, res, next) {
-  tasks.getActiveTasksWithADueDate()
+  tasks.getActiveTasksWithADueDate(req.query.token)
     .then(function (theTasks) {
       res.send(theTasks);
-    });
+    })
+    .catch(function(error) {
+      res.send(error);
+  });
 });
 
 router.put('/:id', function (req, res, next) {
-  tasks.updateTask(req.body)
+  tasks.updateTask(req.body, req.query.token)
     .then(function (status) {
       res.sendStatus(status);
     });

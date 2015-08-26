@@ -14,7 +14,6 @@ module controllers {
         modal;
         popover;
 
-
         static $inject = [
             "$scope",
             "TaskListService",
@@ -33,10 +32,6 @@ module controllers {
                 this.modal = modal;
             });
 
-            this.popover = $ionicPopover.fromTemplate(this.popoverTemplate, {
-                scope: isolateScope
-            });
-
             this.isolateScope.showModal = this.showModal.bind(this);
             this.isolateScope.hideModal = this.hideModal.bind(this);
 
@@ -49,22 +44,12 @@ module controllers {
             this.isolateScope.taskLists.refresh();
         }
 
-
-        save() {
-            if (this.newItemName && this.newItemName.length > 0) {
-                var newItem = new domain.ListItem(this.newItemName);
-                this.listItems.push(newItem);
-
-                this.newItemName = null;
-            }
-        }
-
-        toggle(listItem:ListItem):boolean {
+        toggle(listItem:domain.ListItem):boolean {
             listItem.isComplete = !listItem.isComplete;
             return listItem.isComplete;
         }
 
-        showModal(listItem:ListItem) {
+        showModal(listItem:domain.ListItem) {
             this.isolateScope.currentTask = listItem;
             this.modal.show();
         }

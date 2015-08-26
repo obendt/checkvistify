@@ -3,10 +3,12 @@ module services {
     export class TasksService {
         private $http:ng.IHttpService;
         private $log:angular.ILogService;
+        private $q:angular.IQService;
 
-        constructor($http:angular.IHttpService, $log:angular.ILogService) {
+        constructor($http:angular.IHttpService, $log:angular.ILogService, $q:angular.IQService) {
             this.$http = $http;
             this.$log = $log;
+            this.$q = $q;
         }
 
         public getTasks() {
@@ -16,8 +18,8 @@ module services {
                     return result.data;
                 },
                 (error:angular.IHttpPromiseCallbackArg<any>) => {
-                    console.log('error');
                     this.$log.error('Error ' + error);
+                    return this.$q.reject(error);
                 });
         }
 
@@ -29,10 +31,22 @@ module services {
                     return result.data;
                 },
                 (error:angular.IHttpPromiseCallbackArg<any>) => {
-                    console.log('error');
                     this.$log.error('Error ' + error);
+                    return this.$q.reject(error);
                 });
-            ;
+        }
+
+        public login(task) {
+            var url = 'http://checkvistify-transcg.rhcloud.com/login/' + task.id;
+            return this.$http.put(url, task)
+                .then((result:angular.IHttpPromiseCallbackArg<any>) => {
+                    console.log('success!');
+                    return result.data;
+                },
+                (error:angular.IHttpPromiseCallbackArg<any>) => {
+                    this.$log.error('Error ' + error);
+                    return this.$q.reject(error);
+                });
         }
     }
 

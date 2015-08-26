@@ -7,32 +7,28 @@ var Tasks = (function () {
         var mime = require('rest/interceptor/mime');
         var basicAuth = require('rest/interceptor/basicAuth');
         this.client = rest
-            .wrap(mime)
-            .wrap(basicAuth, {
-            username: process.env.CV_USER,
-            password: process.env.CV_KEY
-        });
+            .wrap(mime);
     }
-    Tasks.prototype.getLists = function () {
-        var url = 'https://checkvist.com/checklists.json';
+    Tasks.prototype.getLists = function (authToken) {
+        var url = 'https://checkvist.com/checklists.json?token=' + authToken;
         return this.client({ path: url })
             .then(function (response) {
             return response.entity;
         });
     };
-    Tasks.prototype.getTasks = function (listId) {
-        var url = 'https://checkvist.com/checklists/' + listId + '/tasks.json';
+    Tasks.prototype.getTasks = function (listId, authToken) {
+        var url = 'https://checkvist.com/checklists/' + listId + '/tasks.json?token=' + authToken;
         return this.client({ path: url })
             .then(function (response) {
             return response.entity;
         });
     };
-    Tasks.prototype.getAllTasks = function () {
+    Tasks.prototype.getAllTasks = function (authToken) {
         var _this = this;
-        return this.getLists()
+        return this.getLists(authToken)
             .then(function (theLists) {
             return _.map(theLists, function (aList) {
-                return _this.getTasks(aList.id);
+                return _this.getTasks(aList.id, authToken);
             });
         })
             .then(function (promiseArray) {
@@ -42,32 +38,51 @@ var Tasks = (function () {
             return _.flatten(arrayOfArrays);
         });
     };
-    Tasks.prototype.getAllTasksWithADueDate = function () {
-        return this.getAllTasks()
+    Tasks.prototype.getAllTasksWithADueDate = function (authToken) {
+        return this.getAllTasks(authToken)
             .then(function (theTasks) {
             return _.filter(theTasks, function (aTask) {
                 return aTask.due !== null;
             });
         });
     };
-    Tasks.prototype.getActiveTasksWithADueDate = function () {
-        return this.getAllTasksWithADueDate()
+    Tasks.prototype.getActiveTasksWithADueDate = function (authToken) {
+        return this.getAllTasksWithADueDate(authToken)
             .then(function (dueTasks) {
             return _.filter(dueTasks, function (dueTask) {
                 return dueTask.status === 0;
             });
+        })
+            .catch(function (error) {
+            console.log(error);
+            return when.reject(error);
         });
     };
-    Tasks.prototype.updateTask = function (task) {
+    Tasks.prototype.updateTask = function (task, authToken) {
         var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({
             method: 'PUT',
             path: url,
             headers: { 'Content-Type': 'application/json' },
-            entity: { due_date: task.due }
+            entity: {
+                token: authToken,
+                due_date: task.due
+            }
         })
             .then(function (response) {
             return response.status.code;
+        });
+    };
+    Tasks.prototype.login = function (username, remoteKey) {
+        var url = 'https://checkvist.com/auth/login.json';
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: { 'Content-Type': 'application/json' },
+            entity: { username: username, remote_key: remoteKey }
+        })
+            .then(function (response) {
+            return response.entity;
         });
     };
     return Tasks;

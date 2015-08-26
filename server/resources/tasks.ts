@@ -13,15 +13,11 @@ class Tasks {
         var basicAuth = require('rest/interceptor/basicAuth');
 
         this.client = rest
-            .wrap(mime)
-            .wrap(basicAuth, {
-                username: process.env.CV_USER,
-                password: process.env.CV_KEY
-            });
+            .wrap(mime);
     }
 
-    getLists() {
-        var url = 'https://checkvist.com/checklists.json';
+    getLists(authToken) {
+        var url = 'https://checkvist.com/checklists.json?token=' + authToken;
 
         return this.client({path: url})
             .then((response) => {
@@ -29,8 +25,8 @@ class Tasks {
             });
     }
 
-    getTasks(listId:string) {
-        var url = 'https://checkvist.com/checklists/' + listId + '/tasks.json';
+    getTasks(listId:string, authToken) {
+        var url = 'https://checkvist.com/checklists/' + listId + '/tasks.json?token=' + authToken;
 
         return this.client({path: url})
             .then((response) => {
@@ -38,11 +34,11 @@ class Tasks {
             });
     }
 
-    getAllTasks() {
-        return this.getLists()
+    getAllTasks(authToken) {
+        return this.getLists(authToken)
             .then((theLists) => {
                 return _.map(theLists, (aList) => {
-                    return this.getTasks(aList.id);
+                    return this.getTasks(aList.id, authToken);
                 });
             })
             .then((promiseArray) => {
@@ -53,8 +49,8 @@ class Tasks {
             });
     }
 
-    getAllTasksWithADueDate() {
-        return this.getAllTasks()
+    getAllTasksWithADueDate(authToken) {
+        return this.getAllTasks(authToken)
             .then((theTasks) => {
                 return _.filter(theTasks, (aTask) => {
                     return aTask.due !== null
@@ -62,27 +58,48 @@ class Tasks {
             });
     }
 
-    getActiveTasksWithADueDate() {
-        return this.getAllTasksWithADueDate()
+    getActiveTasksWithADueDate(authToken) {
+        return this.getAllTasksWithADueDate(authToken)
             .then((dueTasks)=> {
                 return _.filter(dueTasks, (dueTask) => {
                     return dueTask.status === 0
                 });
+            })
+            .catch((error) => {
+                console.log(error);
+                return when.reject(error);
             });
     }
 
-    updateTask(task) {
+    updateTask(task, authToken) {
         var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({
             method: 'PUT',
             path: url,
             headers: {'Content-Type': 'application/json'},
-            entity: {due_date:task.due}
+            entity: {
+                token: authToken,
+                due_date: task.due
+            }
         })
             .then((response) => {
                 return response.status.code;
             });
 
+    }
+
+    login(username, remoteKey) {
+        var url = 'https://checkvist.com/auth/login.json';
+
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: {'Content-Type': 'application/json'},
+            entity: {username: username, remote_key: remoteKey}
+        })
+            .then((response) => {
+                return response.entity;
+            });
     }
 }
 

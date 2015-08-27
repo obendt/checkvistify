@@ -22,6 +22,13 @@ router.get('/active', function(req, res, next) {
   });
 });
 
+router.post('/', function (req, res, next) {
+  tasks.createTask(req.body, req.query.token)
+    .then(function (status) {
+      res.sendStatus(status);
+    });
+});
+
 router.put('/:id', function (req, res, next) {
   tasks.updateTask(req.body, req.query.token)
     .then(function (status) {

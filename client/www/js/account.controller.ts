@@ -1,6 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="taskList.service.ts" />
-///<reference path="auth.service.ts"/>
+/// <reference path="auth.service.ts"/>
 module controllers {
 
     export class AccountController {

@@ -71,6 +71,25 @@ class Tasks {
             });
     }
 
+    createTask(task, authToken) {
+        var inboxId = 482559;
+        var url = 'https://checkvist.com/checklists/' + inboxId + '/tasks.json';
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: {'Content-Type': 'application/json'},
+            entity: {
+                token: authToken,
+                content: task.content,
+                due_date: task.due
+            }
+        })
+            .then((response) => {
+                return response.status.code;
+            });
+
+    }
+
     updateTask(task, authToken) {
         var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({

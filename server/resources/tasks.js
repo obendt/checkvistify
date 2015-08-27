@@ -58,6 +58,23 @@ var Tasks = (function () {
             return when.reject(error);
         });
     };
+    Tasks.prototype.createTask = function (task, authToken) {
+        var inboxId = 482559;
+        var url = 'https://checkvist.com/checklists/' + inboxId + '/tasks.json';
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: { 'Content-Type': 'application/json' },
+            entity: {
+                token: authToken,
+                content: task.content,
+                due_date: task.due
+            }
+        })
+            .then(function (response) {
+            return response.status.code;
+        });
+    };
     Tasks.prototype.updateTask = function (task, authToken) {
         var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '.json';
         return this.client({

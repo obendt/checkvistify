@@ -41,7 +41,10 @@ module controllers {
             this.isolateScope.doNextMonth = this.doNextMonth.bind(this);
 
             this.isolateScope.taskLists = taskListService;
-            this.isolateScope.taskLists.refresh();
+
+            isolateScope.$on('$ionicView.enter', (event) => {
+                isolateScope.taskLists.refresh()
+            })
         }
 
         toggle(listItem:domain.ListItem):boolean {

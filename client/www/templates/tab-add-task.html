@@ -2,10 +2,11 @@
     <ion-content>
         <div style="margin-top: 200px"><label
                 class="item item-input item-stacked-label"">
-            <textarea placeholder="Do what?" rows="5"></textarea>
+            <textarea placeholder="Do what?" rows="5" ng-model="vm.content"></textarea>
             </label>
             <button class="button button-block button-light"
-                    ng-click="vm.authService.login(vm.username, vm.password)">
+                    ng-click="vm.addTask()"
+                    ng-disabled="vm.content.length === 0">
                 OK
             </button>
         </div>

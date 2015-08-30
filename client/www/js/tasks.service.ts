@@ -18,10 +18,29 @@ module services {
             var url:string = 'http://checkvistify-transcg.rhcloud.com/tasks/active?token=' + this.authService.token;
             return this.$http.get(url)
                 .then((result:angular.IHttpPromiseCallbackArg<any>) => {
+                    this.$log.debug(result);
                     return result.data;
-                },
-                (error:angular.IHttpPromiseCallbackArg<any>) => {
+                })
+                .catch((error:angular.IHttpPromiseCallbackArg<any>) => {
                     this.$log.error('Error ' + error);
+                    return this.$q.reject(error);
+                });
+        }
+
+        public createTask(content, dueDate) {
+            var url = 'http://checkvistify-transcg.rhcloud.com/tasks?token=' + this.authService.token;
+            var task = {
+                content: content,
+                due: dueDate
+            };
+
+            return this.$http.post(url, task)
+                .then((result:angular.IHttpPromiseCallbackArg<any>) => {
+                    console.log('success!');
+                    return result.data;
+                })
+                .catch((error:angular.IHttpPromiseCallbackArg<any>) => {
+                    this.$log.error('Error ', error);
                     return this.$q.reject(error);
                 });
         }

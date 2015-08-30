@@ -3,18 +3,46 @@
 /// <reference path="auth.service.ts"/>
 module controllers {
 
+    export enum Tab {ADD_TASK, SCHEDULE, ACCOUNT}
+
     export class AddTaskController {
-        authService:services.AuthService;
         tasksService:services.TasksService;
+        $log:ng.ILogService;
+        $ionicTabsDelegate;
+
+        content:string = '';
+        due:string = 'asap';
+
 
         static $inject = [
-            "AuthService",
-            "TasksService"
+            'TasksService',
+            '$log',
+            '$q',
+            '$ionicTabsDelegate'
         ];
 
-        constructor(authService:services.AuthService, tasksService:services.TasksService) {
-            this.authService = authService;
+        constructor(tasksService:services.TasksService, $log:ng.ILogService, $q:ng.IQService, $ionicTabsDelegate) {
             this.tasksService = tasksService;
+            this.$log = $log;
+            this.$q = $q;
+            this.$ionicTabsDelegate = $ionicTabsDelegate;
+        }
+
+        addTask() {
+            this.tasksService.createTask(this.content, this.due)
+                .then((result) => {
+                    this.content = '';
+                    return result;
+                })
+                .catch((error) => {
+                    if (error.status === 401) {
+                        this.$ionicTabsDelegate.select(Tab.ACCOUNT);
+                    } else {
+
+                    }
+
+                    return this.$q.reject(error);
+                });
         }
     }
 

@@ -1,6 +1,6 @@
-<ion-view view-title="Tasks">
+<ion-view view-title="Account">
     <ion-content>
-        <label class="item item-input">
+        <label class="item item-input" style="margin-top: 200px">
             <span class="input-label">Username:</span>
             <input type="email" ng-model="vm.username">
         </label>
@@ -8,11 +8,10 @@
             <span class="input-label">Password:</span>
             <input type="password" ng-model="vm.password">
         </label>
-    </ion-content>
-    <!-- align to the bottom of the page -->
-    <div style="position: absolute; bottom: 40px; width: 100%">
-        <button class="button button-block button-light" ng-click="vm.authService.login(vm.username, vm.password)">
+        <button class="button button-block button-light"
+                ng-click="vm.authService.login(vm.username, vm.password)">
             OK
         </button>
-    </div>
+    </ion-content>
+    <!-- align to the bottom of the page -->
 </ion-view>

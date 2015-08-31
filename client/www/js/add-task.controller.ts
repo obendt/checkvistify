@@ -38,29 +38,39 @@ module controllers {
 
         addTask() {
             this.tasksService.createTask(this.content, this.due)
-                .then((result) => {
-                    this.content = '';
-                    this.$ionicLoading.show({
-                        template: 'Task Added!',
-                        noBackdrop: true,
-                        duration: 2000
-                    });
-                    return result;
-                })
-                .catch((error) => {
-                    if (error.status === 401) {
-                        this.$ionicLoading.show({
-                            template: 'Please Log In.',
-                            noBackdrop: true,
-                            duration: 2000
-                        });
-                        this.$ionicTabsDelegate.select(Tab.ACCOUNT);
-                    } else {
+                .then(result => this.addTaskSuccess(result))
+                .catch(error => this.addTaskError(error));
+        }
 
-                    }
+        private addTaskSuccess(result) {
+            this.content = '';
+            this.$ionicLoading.show({
+                template: 'Task Added!',
+                noBackdrop: true,
+                duration: 2000
+            });
 
-                    return this.$q.reject(error);
+            return result;
+        }
+
+        private addTaskError(error) {
+            if (error.status === 401) {
+                this.$ionicLoading.show({
+                    template: 'Please Log In.',
+                    noBackdrop: true,
+                    duration: 2000
                 });
+
+                this.$ionicTabsDelegate.select(Tab.ACCOUNT);
+            } else {
+                this.$ionicLoading.show({
+                    template: 'Something went wrong.',
+                    noBackdrop: true,
+                    duration: 2000
+                });
+            }
+
+            return this.$q.reject(error);
         }
     }
 

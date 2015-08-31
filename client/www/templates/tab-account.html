@@ -2,14 +2,14 @@
     <ion-content>
         <label class="item item-input" style="margin-top: 200px">
             <span class="input-label">Username:</span>
-            <input type="email" ng-model="vm.username">
+            <input type="email" ng-model="vm.$localStorage.username">
         </label>
         <label class="item item-input">
             <span class="input-label">Password:</span>
-            <input type="password" ng-model="vm.password">
+            <input type="password" ng-model="vm.$localStorage.password">
         </label>
         <button class="button button-block button-light"
-                ng-click="vm.authService.login(vm.username, vm.password)">
+                ng-click="vm.authService.login(vm.$localStorage.username, vm.$localStorage.password)">
             OK
         </button>
     </ion-content>

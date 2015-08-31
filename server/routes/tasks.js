@@ -36,5 +36,11 @@ router.put('/:id', function (req, res, next) {
     });
 });
 
+router.put('/close/:id', function (req, res, next) {
+  tasks.closeTask(req.body, req.query.token)
+    .then(function (status) {
+      res.sendStatus(status);
+    });
+});
 
 module.exports = router;

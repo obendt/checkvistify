@@ -49,7 +49,6 @@ module services {
             var url = 'http://checkvistify-transcg.rhcloud.com/tasks/' + task.id + '?token=' + this.authService.token;
             return this.$http.put(url, task)
                 .then((result:angular.IHttpPromiseCallbackArg<any>) => {
-                    console.log('success!');
                     return result.data;
                 },
                 (error:angular.IHttpPromiseCallbackArg<any>) => {

@@ -39,17 +39,13 @@ module controllers {
             this.isolateScope.doTomorrow = this.doTomorrow.bind(this);
             this.isolateScope.doNextWeek = this.doNextWeek.bind(this);
             this.isolateScope.doNextMonth = this.doNextMonth.bind(this);
+            this.isolateScope.complete = this.complete.bind(this);
 
             this.isolateScope.taskLists = taskListService;
 
             isolateScope.$on('$ionicView.enter', (event) => {
                 isolateScope.taskLists.refresh()
             })
-        }
-
-        toggle(listItem:domain.ListItem):boolean {
-            listItem.isComplete = !listItem.isComplete;
-            return listItem.isComplete;
         }
 
         showModal(listItem:domain.ListItem) {
@@ -79,6 +75,10 @@ module controllers {
         doNextMonth(task) {
             this.isolateScope.taskLists.doNextMonth(task);
             this.hideModal();
+        }
+
+        complete(task) {
+            this.isolateScope.taskLists.complete(task);
         }
     }
 

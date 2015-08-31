@@ -98,13 +98,26 @@ class Tasks {
             headers: {'Content-Type': 'application/json'},
             entity: {
                 token: authToken,
-                due_date: task.due
+                due_date: task.due,
+                status: task.status
             }
         })
             .then((response) => {
                 return response.status.code;
             });
 
+    }
+
+    closeTask(task, authToken) {
+        var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '/close.json?token=' + authToken;
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then((response) => {
+                return response.status.code;
+            });
     }
 
     login(username, remoteKey) {

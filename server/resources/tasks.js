@@ -83,8 +83,20 @@ var Tasks = (function () {
             headers: { 'Content-Type': 'application/json' },
             entity: {
                 token: authToken,
-                due_date: task.due
+                due_date: task.due,
+                status: task.status
             }
+        })
+            .then(function (response) {
+            return response.status.code;
+        });
+    };
+    Tasks.prototype.closeTask = function (task, authToken) {
+        var url = 'https://checkvist.com/checklists/' + task.checklist_id + '/tasks/' + task.id + '/close.json?token=' + authToken;
+        return this.client({
+            method: 'POST',
+            path: url,
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(function (response) {
             return response.status.code;

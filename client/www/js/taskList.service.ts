@@ -2,6 +2,9 @@
 /// <reference path="tasks.service.ts" />
 /// <reference path="ListItem.ts" />
 module services {
+
+    export enum TaskStatus {OPEN, CLOSED, INVALIDATED}
+
     export class TaskListService {
 
         public overdue:any;
@@ -10,22 +13,32 @@ module services {
         public thisWeek:any;
         public later:any;
 
+        $log:ng.ILogService;
+
         private tasksResource:TasksService;
 
         static $inject = [
-            "TasksService"
+            "TasksService",
+            '$log'
         ];
 
-        constructor(tasksResource:TasksService) {
+        constructor(tasksResource:TasksService, $log) {
             this.tasksResource = tasksResource;
             this.overdue = [];
             this.today = [];
             this.tomorrow = [];
             this.thisWeek = [];
             this.later = [];
+            this.$log = $log;
         }
 
         public refresh() {
+            this.overdue = [];
+            this.today = [];
+            this.tomorrow = [];
+            this.thisWeek = [];
+            this.later = [];
+
             this.tasksResource.getTasks()
                 .then((tasks) => {
                     _.forEach(tasks, (task) => {
@@ -40,6 +53,11 @@ module services {
             _.remove(this.tomorrow, task);
             _.remove(this.thisWeek, task);
             _.remove(this.later, task);
+
+            // When the task has been removed check that it is open before inserting it into another list.
+            if(task.status !== TaskStatus.OPEN) {
+                return;
+            }
 
             if (moment(task.due).isBefore(moment(), 'day')) {
                 this.overdue.push(task);
@@ -76,6 +94,12 @@ module services {
 
         doNextMonth(task) {
             task.due = moment().add(1, 'months').format('YYYY/MM/DD');
+            this.distributeTask(task);
+            this.tasksResource.updateTask(task);
+        }
+
+        complete(task) {
+            task.status = TaskStatus.CLOSED;
             this.distributeTask(task);
             this.tasksResource.updateTask(task);
         }

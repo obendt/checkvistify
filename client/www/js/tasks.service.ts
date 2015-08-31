@@ -56,6 +56,19 @@ module services {
                     return this.$q.reject(error);
                 });
         }
+
+        public closeTask(task) {
+            console.log('close task: ', task);
+            var url = 'http://checkvistify-transcg.rhcloud.com/tasks/close/' + task.id + '?token=' + this.authService.token;
+            return this.$http.put(url, task)
+                .then((result:angular.IHttpPromiseCallbackArg<any>) => {
+                    return result.data;
+                },
+                (error:angular.IHttpPromiseCallbackArg<any>) => {
+                    this.$log.error('Error ' + error);
+                    return this.$q.reject(error);
+                });
+        }
     }
 
     angular.module('services').service('TasksService', TasksService);

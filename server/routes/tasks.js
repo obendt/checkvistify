@@ -8,6 +8,10 @@ router.get('/', function(req, res, next) {
   tasks.getAllTasksWithADueDate()
     .then(function (theTasks) {
       res.send(theTasks);
+    })
+    .catch(function (error) {
+      res.status(error.status.code);
+      res.send(error.entity);
     });
 });
 
@@ -17,15 +21,20 @@ router.get('/active', function(req, res, next) {
     .then(function (theTasks) {
       res.send(theTasks);
     })
-    .catch(function(error) {
-      res.send(error);
-  });
+    .catch(function (error) {
+      res.status(error.status.code);
+      res.send(error.entity);
+    });
 });
 
 router.post('/', function (req, res, next) {
   tasks.createTask(req.body, req.query.token)
     .then(function (status) {
       res.sendStatus(status);
+    })
+    .catch(function (error) {
+      res.status(error.status.code);
+      res.send(error.entity);
     });
 });
 

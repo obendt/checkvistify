@@ -1,4 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
 var _ = require('lodash');
 var when = require('when');
 var Tasks = (function () {
@@ -14,6 +13,9 @@ var Tasks = (function () {
         return this.client({ path: url })
             .then(function (response) {
             return response.entity;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.getTasks = function (listId, authToken) {
@@ -21,6 +23,9 @@ var Tasks = (function () {
         return this.client({ path: url })
             .then(function (response) {
             return response.entity;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.getAllTasks = function (authToken) {
@@ -36,6 +41,9 @@ var Tasks = (function () {
         })
             .then(function (arrayOfArrays) {
             return _.flatten(arrayOfArrays);
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.getAllTasksWithADueDate = function (authToken) {
@@ -44,6 +52,9 @@ var Tasks = (function () {
             return _.filter(theTasks, function (aTask) {
                 return aTask.due !== null;
             });
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.getActiveTasksWithADueDate = function (authToken) {
@@ -55,6 +66,9 @@ var Tasks = (function () {
         })
             .catch(function (error) {
             console.log(error);
+            return when.reject(error);
+        })
+            .catch(function (error) {
             return when.reject(error);
         });
     };
@@ -73,6 +87,9 @@ var Tasks = (function () {
         })
             .then(function (response) {
             return response.status.code;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.updateTask = function (task, authToken) {
@@ -89,6 +106,9 @@ var Tasks = (function () {
         })
             .then(function (response) {
             return response.status.code;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.closeTask = function (task, authToken) {
@@ -100,6 +120,9 @@ var Tasks = (function () {
         })
             .then(function (response) {
             return response.status.code;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     Tasks.prototype.login = function (username, remoteKey) {
@@ -112,6 +135,9 @@ var Tasks = (function () {
         })
             .then(function (response) {
             return response.entity;
+        })
+            .catch(function (error) {
+            return when.reject(error);
         });
     };
     return Tasks;

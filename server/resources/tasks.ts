@@ -1,5 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
-
 var _ = require('lodash');
 var when = require('when');
 
@@ -22,6 +20,9 @@ class Tasks {
         return this.client({path: url})
             .then((response) => {
                 return response.entity;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 
@@ -31,6 +32,9 @@ class Tasks {
         return this.client({path: url})
             .then((response) => {
                 return response.entity;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 
@@ -46,6 +50,9 @@ class Tasks {
             })
             .then((arrayOfArrays) => {
                 return _.flatten(arrayOfArrays);
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 
@@ -55,6 +62,9 @@ class Tasks {
                 return _.filter(theTasks, (aTask) => {
                     return aTask.due !== null
                 });
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 
@@ -67,6 +77,9 @@ class Tasks {
             })
             .catch((error) => {
                 console.log(error);
+                return when.reject(error);
+            })
+            .catch((error) => {
                 return when.reject(error);
             });
     }
@@ -86,6 +99,9 @@ class Tasks {
         })
             .then((response) => {
                 return response.status.code;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
 
     }
@@ -104,6 +120,9 @@ class Tasks {
         })
             .then((response) => {
                 return response.status.code;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
 
     }
@@ -117,6 +136,9 @@ class Tasks {
         })
             .then((response) => {
                 return response.status.code;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 
@@ -131,6 +153,9 @@ class Tasks {
         })
             .then((response) => {
                 return response.entity;
+            })
+            .catch((error) => {
+                return when.reject(error);
             });
     }
 }

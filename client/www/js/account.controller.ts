@@ -59,7 +59,7 @@ module controllers {
 
         private loginError(error) {
             this.$localStorage.password = '';
-            if (error.status === 401) {
+            if (error.status === 403) {
                 this.$ionicLoading.show({
                     template: 'Wrong user name or password.',
                     noBackdrop: true,
